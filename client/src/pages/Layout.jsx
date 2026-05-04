@@ -69,19 +69,20 @@ const Layout = () => {
     return () => clearInterval(poll);
   }, [organization?.id]);
 
-  // Not loaded yet — show spinner
-  if (!isLoaded) {
+  // Redirect unauthenticated users to login page
+  useEffect(() => {
+    if (isLoaded && !user) {
+      navigate("/login", { replace: true });
+    }
+  }, [isLoaded, user, navigate]);
+
+  // Not loaded yet, or not logged in — show spinner while redirecting
+  if (!isLoaded || !user) {
     return (
       <div className="flex items-center justify-center h-screen bg-white dark:bg-zinc-950">
         <Loader2Icon className="size-7 text-blue-500 animate-spin" />
       </div>
     );
-  }
-
-  // Not logged in — redirect to the dedicated login page
-  if (!user) {
-    navigate("/login", { replace: true });
-    return null;
   }
 
   // Loading workspaces

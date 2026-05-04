@@ -8,7 +8,6 @@ const TABS = [
     id: "admin",
     label: "Admin",
     icon: Shield,
-    accent: "blue",
     heading: "Admin Login",
     subheading: "Sign in to manage your workspace, projects, and team.",
     badge: "WORKSPACE OWNER",
@@ -22,14 +21,17 @@ const TABS = [
     borderActive: "border-blue-500",
     textActive: "text-blue-600 dark:text-blue-400",
     bgActive: "bg-blue-50 dark:bg-blue-500/10",
+    // Static classes — Tailwind must see full strings at build time
+    mobileCardBorder: "border-blue-200 dark:border-blue-800",
     iconBg: "bg-blue-100 dark:bg-blue-500/15",
     dotColor: "bg-blue-500",
+    btnPrimary: "bg-blue-600 hover:bg-blue-700 text-white rounded-lg",
+    footerLink: "text-blue-600 dark:text-blue-400",
   },
   {
     id: "member",
     label: "Member",
     icon: Users,
-    accent: "indigo",
     heading: "Member Login",
     subheading: "Sign in to view your tasks, track progress, and collaborate.",
     badge: "TEAM MEMBER",
@@ -43,8 +45,11 @@ const TABS = [
     borderActive: "border-indigo-500",
     textActive: "text-indigo-600 dark:text-indigo-400",
     bgActive: "bg-indigo-50 dark:bg-indigo-500/10",
+    mobileCardBorder: "border-indigo-200 dark:border-indigo-800",
     iconBg: "bg-indigo-100 dark:bg-indigo-500/15",
     dotColor: "bg-indigo-500",
+    btnPrimary: "bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg",
+    footerLink: "text-indigo-600 dark:text-indigo-400",
   },
 ];
 
@@ -183,7 +188,7 @@ const LoginPage = () => {
 
           {/* Role description (mobile) */}
           <div
-            className={`lg:hidden flex items-start gap-3 p-4 rounded-xl border mb-5 ${tab.bgActive} border-${tab.accent === "blue" ? "blue" : "indigo"}-200 dark:border-${tab.accent === "blue" ? "blue" : "indigo"}-800`}
+            className={`lg:hidden flex items-start gap-3 p-4 rounded-xl border mb-5 ${tab.bgActive} ${tab.mobileCardBorder}`}
           >
             <div className={`p-1.5 rounded-lg ${tab.iconBg} shrink-0`}>
               <TabIcon className={`size-4 ${tab.textActive}`} />
@@ -198,12 +203,13 @@ const LoginPage = () => {
             </div>
           </div>
 
-          {/* Clerk SignIn — one instance per tab key so it fully remounts */}
+          {/* Clerk SignIn — key on activeTab so appearance updates on switch */}
           <div key={activeTab} className="flex justify-center">
             <SignIn
-              routing="hash"
-              afterSignInUrl="/"
-              afterSignUpUrl="/"
+              forceRedirectUrl="/"
+              fallbackRedirectUrl="/"
+              signUpForceRedirectUrl="/"
+              signUpFallbackRedirectUrl="/"
               appearance={{
                 elements: {
                   rootBox: "w-full",
@@ -215,14 +221,8 @@ const LoginPage = () => {
                     "border border-gray-200 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700",
                   formFieldInput:
                     "border-gray-200 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white rounded-lg",
-                  formButtonPrimary:
-                    activeTab === "admin"
-                      ? "bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-                      : "bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg",
-                  footerActionLink:
-                    activeTab === "admin"
-                      ? "text-blue-600 dark:text-blue-400"
-                      : "text-indigo-600 dark:text-indigo-400",
+                  formButtonPrimary: tab.btnPrimary,
+                  footerActionLink: tab.footerLink,
                   dividerLine: "bg-gray-200 dark:bg-zinc-700",
                   dividerText: "text-gray-400 dark:text-zinc-500",
                 },
