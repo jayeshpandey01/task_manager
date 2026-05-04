@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loadTheme } from "../features/themeSlice";
 import { Loader2Icon, ShieldX, Clock, ShieldCheck } from "lucide-react";
 import {
   useUser,
-  SignIn,
   useAuth,
   CreateOrganization,
   useOrganization,
@@ -27,6 +26,7 @@ const Layout = () => {
   const { getToken } = useAuth();
   const { organization } = useOrganization();
   const { signOut } = useClerk();
+  const navigate = useNavigate();
 
   // Initial load of theme
   useEffect(() => {
@@ -47,13 +47,19 @@ const Layout = () => {
     }
   }, [organization?.id]);
 
-  // Not logged in
-  if (!isLoaded || (!user && !loading)) {
+  // Not loaded yet — show spinner
+  if (!isLoaded) {
     return (
-      <div className="flex justify-center items-center h-screen bg-white dark:bg-zinc-950">
-        <SignIn />
+      <div className="flex items-center justify-center h-screen bg-white dark:bg-zinc-950">
+        <Loader2Icon className="size-7 text-blue-500 animate-spin" />
       </div>
     );
+  }
+
+  // Not logged in — redirect to the dedicated login page
+  if (!user) {
+    navigate("/login", { replace: true });
+    return null;
   }
 
   // Loading workspaces
@@ -65,140 +71,101 @@ const Layout = () => {
     );
   }
 
-  // User has no workspace yet — show role-selection screen
+  // User is logged in but has no workspace yet
   if (user && isLoaded && workspaces.length === 0) {
-    // Admin chose to set up a workspace
+    // Admin: show Clerk CreateOrganization
     if (showAdminSetup) {
       return (
-        <div className="min-h-screen flex justify-center items-center bg-gray-50 dark:bg-zinc-950 p-4">
-          <div className="flex flex-col items-center gap-4 w-full">
-            <div className="text-center mb-2">
-              <p className="text-xs text-gray-500 dark:text-zinc-400">
-                Step 2 of 2 &mdash; Create your workspace
-              </p>
-              <p className="text-sm text-gray-600 dark:text-zinc-300 mt-1">
-                After creating, you will be taken to your Admin dashboard automatically.
-              </p>
-            </div>
-            <CreateOrganization />
-            <button
-              onClick={() => setShowAdminSetup(false)}
-              className="text-sm text-gray-400 dark:text-zinc-500 hover:underline"
-            >
-              &larr; Back
-            </button>
+        <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50 dark:bg-zinc-950 gap-5 p-4">
+          <div className="text-center">
+            <p className="text-xs font-medium text-blue-500 uppercase tracking-wide mb-1">
+              Create Workspace
+            </p>
+            <p className="text-sm text-gray-500 dark:text-zinc-400">
+              You will be taken to the Admin dashboard once your workspace is ready.
+            </p>
           </div>
+          <CreateOrganization />
+          <button
+            onClick={() => setShowAdminSetup(false)}
+            className="text-xs text-gray-400 dark:text-zinc-500 hover:underline"
+          >
+            &larr; Back
+          </button>
         </div>
       );
     }
 
+    // Role picker — shown after login when user has no workspace
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-950 p-4">
-        <div className="w-full max-w-lg">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-blue-100 dark:bg-blue-500/10 mb-4">
-              <ShieldCheck className="size-7 text-blue-500" />
+        <div className="w-full max-w-sm">
+          {/* Logo */}
+          <div className="flex items-center justify-center gap-2.5 mb-8">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+              <span className="text-white font-bold text-sm">TM</span>
             </div>
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
-              Welcome, {user.firstName || user.emailAddresses?.[0]?.emailAddress?.split("@")[0] || "there"}
-            </h1>
-            <p className="text-sm text-gray-500 dark:text-zinc-400 mt-2">
-              You are not part of any workspace yet. Are you an Admin or a Team Member?
-            </p>
+            <span className="font-semibold text-gray-900 dark:text-white">TaskManager</span>
           </div>
 
-          <div className="grid grid-cols-1 gap-4">
-            {/* ── Admin path ── */}
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-white text-center mb-1">
+            One more step
+          </h1>
+          <p className="text-sm text-gray-500 dark:text-zinc-400 text-center mb-6">
+            You are logged in as{" "}
+            <span className="font-medium text-gray-700 dark:text-zinc-200">
+              {user.primaryEmailAddress?.emailAddress}
+            </span>
+            . Choose your role to continue.
+          </p>
+
+          <div className="space-y-3">
+            {/* Admin card */}
             <button
               onClick={() => setShowAdminSetup(true)}
-              className="flex items-start gap-4 p-5 rounded-xl border-2 border-blue-500 bg-blue-50 dark:bg-blue-500/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition text-left w-full"
+              className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-blue-500 bg-blue-50 dark:bg-blue-500/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition text-left"
             >
-              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-500/20 mt-0.5 shrink-0">
+              <div className="p-2.5 rounded-lg bg-blue-100 dark:bg-blue-500/20 shrink-0">
                 <ShieldCheck className="size-5 text-blue-600 dark:text-blue-400" />
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                    I am an Admin
-                  </p>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500 text-white font-medium">
-                    CREATE WORKSPACE
-                  </span>
-                </div>
-                <p className="text-xs text-gray-500 dark:text-zinc-400 mb-3">
-                  Create a new workspace, then invite your team. You will get a full admin dashboard with task assignment, scoring, and team management.
+              <div>
+                <p className="font-semibold text-sm text-gray-900 dark:text-white">
+                  I am an Admin
                 </p>
-                {/* Step-by-step for admin */}
-                <ol className="space-y-1">
-                  {[
-                    "Sign up / log in (you are here)",
-                    'Click "I am an Admin" and create your workspace',
-                    "You land on the Admin dashboard",
-                    'Go to Team page → click "Invite Member" to invite teammates by email',
-                    "Teammates accept the invite email and log in as Members",
-                  ].map((step, i) => (
-                    <li key={i} className="flex items-start gap-2 text-xs text-gray-500 dark:text-zinc-400">
-                      <span className="inline-flex items-center justify-center size-4 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 font-bold shrink-0 mt-0.5 text-[10px]">
-                        {i + 1}
-                      </span>
-                      {step}
-                    </li>
-                  ))}
-                </ol>
+                <p className="text-xs text-gray-500 dark:text-zinc-400 mt-0.5">
+                  Create a workspace and manage your team
+                </p>
               </div>
             </button>
 
-            {/* ── Member path ── */}
-            <div className="flex items-start gap-4 p-5 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-left">
-              <div className="p-2 rounded-lg bg-amber-100 dark:bg-amber-500/20 mt-0.5 shrink-0">
+            {/* Member card */}
+            <div className="w-full flex items-start gap-4 p-4 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+              <div className="p-2.5 rounded-lg bg-amber-100 dark:bg-amber-500/20 shrink-0 mt-0.5">
                 <Clock className="size-5 text-amber-600 dark:text-amber-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                    I am a Team Member
-                  </p>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-400 text-white font-medium">
-                    INVITE REQUIRED
-                  </span>
-                </div>
-                <p className="text-xs text-gray-500 dark:text-zinc-400 mb-3">
-                  You need an invitation from your admin before you can access the app.
+                <p className="font-semibold text-sm text-gray-900 dark:text-white">
+                  I am a Member
                 </p>
-                {/* Step-by-step for member */}
-                <ol className="space-y-1 mb-4">
-                  {[
-                    "Ask your admin to invite you from the Team page",
-                    "Check your email inbox for the invitation link",
-                    "Click the link — it opens the app and joins you to the workspace",
-                    "Log in (or sign up if first time) with the same email",
-                    'Click "Refresh" below — your Member dashboard will appear',
-                  ].map((step, i) => (
-                    <li key={i} className="flex items-start gap-2 text-xs text-gray-500 dark:text-zinc-400">
-                      <span className="inline-flex items-center justify-center size-4 rounded-full bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold shrink-0 mt-0.5 text-[10px]">
-                        {i + 1}
-                      </span>
-                      {step}
-                    </li>
-                  ))}
-                </ol>
+                <p className="text-xs text-gray-500 dark:text-zinc-400 mt-0.5 mb-3">
+                  Check your email for an invitation link from your admin, accept it, then click Refresh.
+                </p>
                 <button
                   onClick={() => dispatch(fetchWorkspaces({ getToken }))}
-                  className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-700 text-amber-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-500/20 transition"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-500/20 transition"
                 >
                   <Clock className="size-3" />
-                  Refresh — I accepted my invitation
+                  Refresh after accepting invite
                 </button>
               </div>
             </div>
           </div>
 
           <button
-            onClick={() => signOut()}
+            onClick={() => signOut({ redirectUrl: "/login" })}
             className="mt-6 w-full text-xs text-center text-gray-400 dark:text-zinc-500 hover:underline"
           >
-            Sign out
+            Sign out and use a different account
           </button>
         </div>
       </div>
