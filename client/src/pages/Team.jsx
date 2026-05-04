@@ -1,19 +1,109 @@
 import { useEffect, useState } from "react";
-import { UsersIcon, Search, UserPlus, Shield, Activity } from "lucide-react";
+import {
+  UsersIcon,
+  Search,
+  UserPlus,
+  Shield,
+  Activity,
+  ShieldX,
+  ShieldCheck,
+  Star,
+} from "lucide-react";
 import InviteMemberDialog from "../components/InviteMemberDialog";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRole } from "../hooks/useRole";
+import { useAuth } from "@clerk/clerk-react";
+import toast from "react-hot-toast";
+import api from "../configs/api";
+import { updateMember } from "../features/workspaceSlice";
+
+const ScoreInput = ({ member, onSave }) => {
+  const [value, setValue] = useState(member.score ?? 0);
+  const [editing, setEditing] = useState(false);
+
+  const handleSave = () => {
+    const num = Math.min(100, Math.max(0, Number(value)));
+    onSave(member.id, num);
+    setEditing(false);
+  };
+
+  return editing ? (
+    <div className="flex items-center gap-1">
+      <input
+        type="number"
+        min={0}
+        max={100}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className="w-16 px-2 py-0.5 text-xs rounded border border-gray-300 dark:border-zinc-700 dark:bg-zinc-800 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
+        autoFocus
+        onKeyDown={(e) => e.key === "Enter" && handleSave()}
+      />
+      <button
+        onClick={handleSave}
+        className="text-xs px-2 py-0.5 bg-blue-500 hover:bg-blue-600 text-white rounded"
+      >
+        Save
+      </button>
+    </div>
+  ) : (
+    <button
+      onClick={() => setEditing(true)}
+      className="flex items-center gap-1 text-xs px-2 py-0.5 rounded border border-gray-200 dark:border-zinc-700 hover:border-blue-400 dark:hover:border-blue-500 text-gray-700 dark:text-zinc-300 transition"
+      title="Click to edit score"
+    >
+      <Star className="size-3 text-amber-400" />
+      {value}/100
+    </button>
+  );
+};
 
 const Team = () => {
   const [tasks, setTasks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [users, setUsers] = useState([]);
+  const [blockingId, setBlockingId] = useState(null);
   const { isAdmin } = useRole();
+  const { getToken } = useAuth();
+  const dispatch = useDispatch();
   const currentWorkspace = useSelector(
     (state) => state?.workspace?.currentWorkspace || null
   );
   const projects = currentWorkspace?.projects || [];
+
+  const handleBlock = async (memberId) => {
+    setBlockingId(memberId);
+    try {
+      const token = await getToken();
+      const { data } = await api.put(
+        `/api/workspaces/member/${memberId}/block`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      dispatch(updateMember(data.member));
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error.message);
+    } finally {
+      setBlockingId(null);
+    }
+  };
+
+  const handleScoreSave = async (memberId, score) => {
+    try {
+      const token = await getToken();
+      const { data } = await api.put(
+        `/api/workspaces/member/${memberId}/score`,
+        { score },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      dispatch(updateMember(data.member));
+      toast.success("Score updated");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error.message);
+    }
+  };
 
   const filteredUsers = users.filter(
     (user) =>
@@ -162,13 +252,28 @@ const Team = () => {
                     <th className="px-6 py-2.5 text-left font-medium text-sm">
                       Role
                     </th>
+                    {isAdmin && (
+                      <>
+                        <th className="px-6 py-2.5 text-left font-medium text-sm">
+                          Score
+                        </th>
+                        <th className="px-6 py-2.5 text-left font-medium text-sm">
+                          Status
+                        </th>
+                        <th className="px-6 py-2.5 text-left font-medium text-sm">
+                          Actions
+                        </th>
+                      </>
+                    )}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
                   {filteredUsers.map((user) => (
                     <tr
                       key={user.id}
-                      className="hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors"
+                      className={`hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors ${
+                        user.isBlocked ? "opacity-60" : ""
+                      }`}
                     >
                       <td className="px-6 py-2.5 whitespace-nowrap flex items-center gap-3">
                         <img
@@ -194,6 +299,56 @@ const Team = () => {
                           {user.role || "User"}
                         </span>
                       </td>
+                      {isAdmin && (
+                        <>
+                          <td className="px-6 py-2.5 whitespace-nowrap">
+                            {user.role === "MEMBER" ? (
+                              <ScoreInput
+                                member={user}
+                                onSave={handleScoreSave}
+                              />
+                            ) : (
+                              <span className="text-xs text-gray-400 dark:text-zinc-600">—</span>
+                            )}
+                          </td>
+                          <td className="px-6 py-2.5 whitespace-nowrap">
+                            {user.isBlocked ? (
+                              <span className="text-xs px-2 py-0.5 rounded bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400">
+                                Blocked
+                              </span>
+                            ) : (
+                              <span className="text-xs px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+                                Active
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-6 py-2.5 whitespace-nowrap">
+                            {user.role === "MEMBER" && (
+                              <button
+                                onClick={() => handleBlock(user.id)}
+                                disabled={blockingId === user.id}
+                                className={`flex items-center gap-1 text-xs px-2 py-1 rounded border transition disabled:opacity-50 ${
+                                  user.isBlocked
+                                    ? "border-emerald-300 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10"
+                                    : "border-red-200 dark:border-red-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10"
+                                }`}
+                              >
+                                {user.isBlocked ? (
+                                  <>
+                                    <ShieldCheck className="size-3" />
+                                    Unblock
+                                  </>
+                                ) : (
+                                  <>
+                                    <ShieldX className="size-3" />
+                                    Block
+                                  </>
+                                )}
+                              </button>
+                            )}
+                          </td>
+                        </>
+                      )}
                     </tr>
                   ))}
                 </tbody>
@@ -205,7 +360,9 @@ const Team = () => {
               {filteredUsers.map((user) => (
                 <div
                   key={user.id}
-                  className="p-4 border border-gray-200 dark:border-zinc-800 rounded-md bg-white dark:bg-zinc-900"
+                  className={`p-4 border border-gray-200 dark:border-zinc-800 rounded-md bg-white dark:bg-zinc-900 ${
+                    user.isBlocked ? "opacity-60" : ""
+                  }`}
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <img
@@ -213,16 +370,21 @@ const Team = () => {
                       alt={user.user.name}
                       className="size-9 rounded-full bg-gray-200 dark:bg-zinc-800"
                     />
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 dark:text-white truncate">
                         {user.user?.name || "Unknown User"}
                       </p>
-                      <p className="text-sm text-gray-500 dark:text-zinc-400">
+                      <p className="text-sm text-gray-500 dark:text-zinc-400 truncate">
                         {user.user.email}
                       </p>
                     </div>
+                    {user.isBlocked && (
+                      <span className="text-xs px-1.5 py-0.5 bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 rounded">
+                        Blocked
+                      </span>
+                    )}
                   </div>
-                  <div>
+                  <div className="flex items-center gap-2 flex-wrap">
                     <span
                       className={`px-2 py-1 text-xs rounded-md ${
                         user.role === "ADMIN"
@@ -232,6 +394,30 @@ const Team = () => {
                     >
                       {user.role || "User"}
                     </span>
+                    {isAdmin && user.role === "MEMBER" && (
+                      <>
+                        <ScoreInput member={user} onSave={handleScoreSave} />
+                        <button
+                          onClick={() => handleBlock(user.id)}
+                          disabled={blockingId === user.id}
+                          className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded border transition disabled:opacity-50 ${
+                            user.isBlocked
+                              ? "border-emerald-300 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400"
+                              : "border-red-200 dark:border-red-800 text-red-500"
+                          }`}
+                        >
+                          {user.isBlocked ? (
+                            <>
+                              <ShieldCheck className="size-3" /> Unblock
+                            </>
+                          ) : (
+                            <>
+                              <ShieldX className="size-3" /> Block
+                            </>
+                          )}
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}

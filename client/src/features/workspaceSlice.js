@@ -123,6 +123,25 @@ const workspaceSlice = createSlice({
           : w
       );
     },
+    updateMember: (state, action) => {
+      // action.payload = updated WorkspaceMember object
+      const updated = action.payload;
+      if (state.currentWorkspace) {
+        state.currentWorkspace.members = state.currentWorkspace.members.map(
+          (m) => (m.id === updated.id ? { ...m, ...updated } : m)
+        );
+      }
+      state.workspaces = state.workspaces.map((w) =>
+        w.id === state.currentWorkspace?.id
+          ? {
+              ...w,
+              members: w.members.map((m) =>
+                m.id === updated.id ? { ...m, ...updated } : m
+              ),
+            }
+          : w
+      );
+    },
     deleteTask: (state, action) => {
       state.currentWorkspace.projects.map((p) => {
         p.tasks = p.tasks.filter((t) => !action.payload.includes(t.id));
@@ -195,5 +214,6 @@ export const {
   addTask,
   updateTask,
   deleteTask,
+  updateMember,
 } = workspaceSlice.actions;
 export default workspaceSlice.reducer;

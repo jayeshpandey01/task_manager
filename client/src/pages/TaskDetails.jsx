@@ -1,11 +1,13 @@
 import { format } from "date-fns";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { CalendarIcon, MessageCircle, PenIcon, Github } from "lucide-react";
+import { CalendarIcon, MessageCircle, PenIcon, Github, CheckCircle2 } from "lucide-react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import api from "../configs/api";
+import TaskTimer from "../components/TaskTimer";
+import { updateTask } from "../features/workspaceSlice";
 
 const TaskDetails = () => {
   const [searchParams] = useSearchParams();
@@ -14,11 +16,13 @@ const TaskDetails = () => {
 
   const { user } = useUser();
   const { getToken } = useAuth();
+  const dispatch = useDispatch();
   const [task, setTask] = useState(null);
   const [project, setProject] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(true);
+  const [accepting, setAccepting] = useState(false);
 
   const { currentWorkspace } = useSelector((state) => state.workspace);
 
@@ -75,6 +79,26 @@ const TaskDetails = () => {
       toast.dismissAll();
       toast.error(error?.response?.data?.message || error.message);
       console.error(error);
+    }
+  };
+
+  const handleAcceptTask = async () => {
+    if (!task || task.isAccepted) return;
+    setAccepting(true);
+    try {
+      const token = await getToken();
+      const { data } = await api.put(
+        `/api/tasks/${task.id}/accept`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setTask(data.task);
+      dispatch(updateTask(data.task));
+      toast.success("Task accepted! GitHub link is now visible.");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error.message);
+    } finally {
+      setAccepting(false);
     }
   };
 
@@ -197,19 +221,42 @@ const TaskDetails = () => {
             </p>
           )}
 
-          {task.github_url && (
+          {/* GitHub Link & Timer - Show only if accepted or admin */}
+          {(task.isAccepted || user?.id !== task.assigneeId) && task.github_url && (
             <div className="mb-4">
-              <a
-                href={task.github_url}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200 dark:border-zinc-700"
+              <div className="flex items-center gap-3 flex-wrap">
+                <a
+                  href={task.github_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200 dark:border-zinc-700"
+                >
+                  <Github className="size-4" />
+                  <span className="font-medium truncate max-w-xs">
+                    {task.github_url.replace("https://github.com/", "")}
+                  </span>
+                </a>
+                {task.isAccepted && task.acceptedAt && (
+                  <TaskTimer acceptedAt={task.acceptedAt} />
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Accept Task Button - Show for assigned member if not yet accepted */}
+          {!task.isAccepted && user?.id === task.assigneeId && (
+            <div className="mb-4 p-3 rounded-md bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-800">
+              <p className="text-sm text-blue-900 dark:text-blue-200 mb-3">
+                You have been assigned this task. Accept it to view the GitHub link and start the timer.
+              </p>
+              <button
+                onClick={handleAcceptTask}
+                disabled={accepting}
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-md bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white transition font-medium"
               >
-                <Github className="size-4" />
-                <span className="font-medium truncate max-w-xs">
-                  {task.github_url.replace("https://github.com/", "")}
-                </span>
-              </a>
+                <CheckCircle2 className="size-4" />
+                {accepting ? "Accepting..." : "Accept Task"}
+              </button>
             </div>
           )}
 
