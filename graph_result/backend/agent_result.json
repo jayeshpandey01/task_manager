@@ -1,0 +1,1009 @@
+{
+  "intent": "domain_query",
+  "cypher_query": "MATCH (p:Product) WHERE toLower(p.description) CONTAINS toLower('almond') AND toLower(p.description) CONTAINS toLower('thyme') AND toLower(p.description) CONTAINS toLower('beard') MATCH (c:Customer)-[r1:PLACED]->(o:SalesOrder)-[r2:HAS_ITEM]->(i:SalesOrderItem)-[r3:IS_PRODUCT]->(p) RETURN c, r1, o, r2, i, r3, p",
+  "results": [
+    {
+      "c": {
+        "id": "310000108",
+        "labels": [
+          "Customer"
+        ],
+        "properties": {
+          "name": "Cardenas, Parker and Avila",
+          "isBlocked": false,
+          "id": "310000108",
+          "category": "2",
+          "creationDate": "2024-04-16T00:00:00.000Z"
+        }
+      },
+      "r1": {
+        "id": "310000108-740506",
+        "type": "PLACED",
+        "source": "310000108",
+        "target": "740506",
+        "properties": {}
+      },
+      "o": {
+        "id": "740506",
+        "labels": [
+          "SalesOrder"
+        ],
+        "properties": {
+          "salesOrderType": "OR",
+          "transactionCurrency": "INR",
+          "overallDeliveryStatus": "C",
+          "totalNetAmount": "17108.25",
+          "id": "740506",
+          "creationDate": "2025-03-31T00:00:00.000Z"
+        }
+      },
+      "r2": {
+        "id": "740506-740506_10",
+        "type": "HAS_ITEM",
+        "source": "740506",
+        "target": "740506_10",
+        "properties": {}
+      },
+      "i": {
+        "id": "740506_10",
+        "labels": [
+          "SalesOrderItem"
+        ],
+        "properties": {
+          "itemNumber": "10",
+          "material": "S8907367001003",
+          "netAmount": "9966.1",
+          "plant": "1920",
+          "requestedQuantity": "48",
+          "storageLocation": "V2S2",
+          "currency": "INR",
+          "id": "740506_10",
+          "salesOrder": "740506"
+        }
+      },
+      "r3": {
+        "id": "740506_10-S8907367001003",
+        "type": "IS_PRODUCT",
+        "source": "740506_10",
+        "target": "S8907367001003",
+        "properties": {}
+      },
+      "p": {
+        "id": "S8907367001003",
+        "labels": [
+          "Product"
+        ],
+        "properties": {
+          "baseUnit": "PC",
+          "netWeight": "0.01",
+          "description": "BEARDOIL 30ML ALMOND+THYME",
+          "id": "S8907367001003",
+          "creationDate": "2024-11-26T00:00:00.000Z",
+          "type": "ZFS1",
+          "group": "ZFG1001"
+        }
+      }
+    },
+    {
+      "c": {
+        "id": "310000109",
+        "labels": [
+          "Customer"
+        ],
+        "properties": {
+          "name": "Bradley-Kelley",
+          "isBlocked": false,
+          "id": "310000109",
+          "category": "2",
+          "creationDate": "2024-04-16T00:00:00.000Z"
+        }
+      },
+      "r1": {
+        "id": "310000109-740507",
+        "type": "PLACED",
+        "source": "310000109",
+        "target": "740507",
+        "properties": {}
+      },
+      "o": {
+        "id": "740507",
+        "labels": [
+          "SalesOrder"
+        ],
+        "properties": {
+          "salesOrderType": "OR",
+          "transactionCurrency": "INR",
+          "overallDeliveryStatus": "C",
+          "totalNetAmount": "19021.27",
+          "id": "740507",
+          "creationDate": "2025-03-31T00:00:00.000Z"
+        }
+      },
+      "r2": {
+        "id": "740507-740507_10",
+        "type": "HAS_ITEM",
+        "source": "740507",
+        "target": "740507_10",
+        "properties": {}
+      },
+      "i": {
+        "id": "740507_10",
+        "labels": [
+          "SalesOrderItem"
+        ],
+        "properties": {
+          "itemNumber": "10",
+          "material": "S8907367001003",
+          "netAmount": "4983.05",
+          "plant": "1920",
+          "requestedQuantity": "24",
+          "storageLocation": "V2S2",
+          "currency": "INR",
+          "id": "740507_10",
+          "salesOrder": "740507"
+        }
+      },
+      "r3": {
+        "id": "740507_10-S8907367001003",
+        "type": "IS_PRODUCT",
+        "source": "740507_10",
+        "target": "S8907367001003",
+        "properties": {}
+      },
+      "p": {
+        "id": "S8907367001003",
+        "labels": [
+          "Product"
+        ],
+        "properties": {
+          "baseUnit": "PC",
+          "netWeight": "0.01",
+          "description": "BEARDOIL 30ML ALMOND+THYME",
+          "id": "S8907367001003",
+          "creationDate": "2024-11-26T00:00:00.000Z",
+          "type": "ZFS1",
+          "group": "ZFG1001"
+        }
+      }
+    },
+    {
+      "c": {
+        "id": "310000109",
+        "labels": [
+          "Customer"
+        ],
+        "properties": {
+          "name": "Bradley-Kelley",
+          "isBlocked": false,
+          "id": "310000109",
+          "category": "2",
+          "creationDate": "2024-04-16T00:00:00.000Z"
+        }
+      },
+      "r1": {
+        "id": "310000109-740508",
+        "type": "PLACED",
+        "source": "310000109",
+        "target": "740508",
+        "properties": {}
+      },
+      "o": {
+        "id": "740508",
+        "labels": [
+          "SalesOrder"
+        ],
+        "properties": {
+          "salesOrderType": "OR",
+          "transactionCurrency": "INR",
+          "overallDeliveryStatus": "C",
+          "totalNetAmount": "883.88",
+          "id": "740508",
+          "creationDate": "2025-03-31T00:00:00.000Z"
+        }
+      },
+      "r2": {
+        "id": "740508-740508_10",
+        "type": "HAS_ITEM",
+        "source": "740508",
+        "target": "740508_10",
+        "properties": {}
+      },
+      "i": {
+        "id": "740508_10",
+        "labels": [
+          "SalesOrderItem"
+        ],
+        "properties": {
+          "itemNumber": "10",
+          "material": "S8907367001003",
+          "netAmount": "207.63",
+          "plant": "1920",
+          "requestedQuantity": "1",
+          "storageLocation": "V2S2",
+          "currency": "INR",
+          "id": "740508_10",
+          "salesOrder": "740508"
+        }
+      },
+      "r3": {
+        "id": "740508_10-S8907367001003",
+        "type": "IS_PRODUCT",
+        "source": "740508_10",
+        "target": "S8907367001003",
+        "properties": {}
+      },
+      "p": {
+        "id": "S8907367001003",
+        "labels": [
+          "Product"
+        ],
+        "properties": {
+          "baseUnit": "PC",
+          "netWeight": "0.01",
+          "description": "BEARDOIL 30ML ALMOND+THYME",
+          "id": "S8907367001003",
+          "creationDate": "2024-11-26T00:00:00.000Z",
+          "type": "ZFS1",
+          "group": "ZFG1001"
+        }
+      }
+    },
+    {
+      "c": {
+        "id": "320000083",
+        "labels": [
+          "Customer"
+        ],
+        "properties": {
+          "name": "Nelson, Fitzpatrick and Jordan",
+          "isBlocked": true,
+          "id": "320000083",
+          "category": "2",
+          "creationDate": "2024-11-20T00:00:00.000Z"
+        }
+      },
+      "r1": {
+        "id": "320000083-740511",
+        "type": "PLACED",
+        "source": "320000083",
+        "target": "740511",
+        "properties": {}
+      },
+      "o": {
+        "id": "740511",
+        "labels": [
+          "SalesOrder"
+        ],
+        "properties": {
+          "salesOrderType": "OR",
+          "transactionCurrency": "INR",
+          "overallDeliveryStatus": "C",
+          "totalNetAmount": "250",
+          "id": "740511",
+          "creationDate": "2025-04-02T00:00:00.000Z"
+        }
+      },
+      "r2": {
+        "id": "740511-740511_10",
+        "type": "HAS_ITEM",
+        "source": "740511",
+        "target": "740511_10",
+        "properties": {}
+      },
+      "i": {
+        "id": "740511_10",
+        "labels": [
+          "SalesOrderItem"
+        ],
+        "properties": {
+          "itemNumber": "10",
+          "material": "S8907367001003",
+          "netAmount": "250",
+          "plant": "WB05",
+          "requestedQuantity": "1",
+          "storageLocation": "5101",
+          "currency": "INR",
+          "id": "740511_10",
+          "salesOrder": "740511"
+        }
+      },
+      "r3": {
+        "id": "740511_10-S8907367001003",
+        "type": "IS_PRODUCT",
+        "source": "740511_10",
+        "target": "S8907367001003",
+        "properties": {}
+      },
+      "p": {
+        "id": "S8907367001003",
+        "labels": [
+          "Product"
+        ],
+        "properties": {
+          "baseUnit": "PC",
+          "netWeight": "0.01",
+          "description": "BEARDOIL 30ML ALMOND+THYME",
+          "id": "S8907367001003",
+          "creationDate": "2024-11-26T00:00:00.000Z",
+          "type": "ZFS1",
+          "group": "ZFG1001"
+        }
+      }
+    },
+    {
+      "c": {
+        "id": "320000083",
+        "labels": [
+          "Customer"
+        ],
+        "properties": {
+          "name": "Nelson, Fitzpatrick and Jordan",
+          "isBlocked": true,
+          "id": "320000083",
+          "category": "2",
+          "creationDate": "2024-11-20T00:00:00.000Z"
+        }
+      },
+      "r1": {
+        "id": "320000083-740529",
+        "type": "PLACED",
+        "source": "320000083",
+        "target": "740529",
+        "properties": {}
+      },
+      "o": {
+        "id": "740529",
+        "labels": [
+          "SalesOrder"
+        ],
+        "properties": {
+          "salesOrderType": "OR",
+          "transactionCurrency": "INR",
+          "overallDeliveryStatus": "C",
+          "totalNetAmount": "216.1",
+          "id": "740529",
+          "creationDate": "2025-04-02T00:00:00.000Z"
+        }
+      },
+      "r2": {
+        "id": "740529-740529_10",
+        "type": "HAS_ITEM",
+        "source": "740529",
+        "target": "740529_10",
+        "properties": {}
+      },
+      "i": {
+        "id": "740529_10",
+        "labels": [
+          "SalesOrderItem"
+        ],
+        "properties": {
+          "itemNumber": "10",
+          "material": "S8907367001003",
+          "netAmount": "216.1",
+          "plant": "WB05",
+          "requestedQuantity": "1",
+          "storageLocation": "5101",
+          "currency": "INR",
+          "id": "740529_10",
+          "salesOrder": "740529"
+        }
+      },
+      "r3": {
+        "id": "740529_10-S8907367001003",
+        "type": "IS_PRODUCT",
+        "source": "740529_10",
+        "target": "S8907367001003",
+        "properties": {}
+      },
+      "p": {
+        "id": "S8907367001003",
+        "labels": [
+          "Product"
+        ],
+        "properties": {
+          "baseUnit": "PC",
+          "netWeight": "0.01",
+          "description": "BEARDOIL 30ML ALMOND+THYME",
+          "id": "S8907367001003",
+          "creationDate": "2024-11-26T00:00:00.000Z",
+          "type": "ZFS1",
+          "group": "ZFG1001"
+        }
+      }
+    },
+    {
+      "c": {
+        "id": "320000083",
+        "labels": [
+          "Customer"
+        ],
+        "properties": {
+          "name": "Nelson, Fitzpatrick and Jordan",
+          "isBlocked": true,
+          "id": "320000083",
+          "category": "2",
+          "creationDate": "2024-11-20T00:00:00.000Z"
+        }
+      },
+      "r1": {
+        "id": "320000083-740552",
+        "type": "PLACED",
+        "source": "320000083",
+        "target": "740552",
+        "properties": {}
+      },
+      "o": {
+        "id": "740552",
+        "labels": [
+          "SalesOrder"
+        ],
+        "properties": {
+          "salesOrderType": "OR",
+          "transactionCurrency": "INR",
+          "overallDeliveryStatus": "C",
+          "totalNetAmount": "216.1",
+          "id": "740552",
+          "creationDate": "2025-04-02T00:00:00.000Z"
+        }
+      },
+      "r2": {
+        "id": "740552-740552_10",
+        "type": "HAS_ITEM",
+        "source": "740552",
+        "target": "740552_10",
+        "properties": {}
+      },
+      "i": {
+        "id": "740552_10",
+        "labels": [
+          "SalesOrderItem"
+        ],
+        "properties": {
+          "itemNumber": "10",
+          "material": "S8907367001003",
+          "netAmount": "216.1",
+          "plant": "WB05",
+          "requestedQuantity": "1",
+          "storageLocation": "5101",
+          "currency": "INR",
+          "id": "740552_10",
+          "salesOrder": "740552"
+        }
+      },
+      "r3": {
+        "id": "740552_10-S8907367001003",
+        "type": "IS_PRODUCT",
+        "source": "740552_10",
+        "target": "S8907367001003",
+        "properties": {}
+      },
+      "p": {
+        "id": "S8907367001003",
+        "labels": [
+          "Product"
+        ],
+        "properties": {
+          "baseUnit": "PC",
+          "netWeight": "0.01",
+          "description": "BEARDOIL 30ML ALMOND+THYME",
+          "id": "S8907367001003",
+          "creationDate": "2024-11-26T00:00:00.000Z",
+          "type": "ZFS1",
+          "group": "ZFG1001"
+        }
+      }
+    },
+    {
+      "c": {
+        "id": "320000083",
+        "labels": [
+          "Customer"
+        ],
+        "properties": {
+          "name": "Nelson, Fitzpatrick and Jordan",
+          "isBlocked": true,
+          "id": "320000083",
+          "category": "2",
+          "creationDate": "2024-11-20T00:00:00.000Z"
+        }
+      },
+      "r1": {
+        "id": "320000083-740582",
+        "type": "PLACED",
+        "source": "320000083",
+        "target": "740582",
+        "properties": {}
+      },
+      "o": {
+        "id": "740582",
+        "labels": [
+          "SalesOrder"
+        ],
+        "properties": {
+          "salesOrderType": "OR",
+          "transactionCurrency": "INR",
+          "overallDeliveryStatus": "C",
+          "totalNetAmount": "216.1",
+          "id": "740582",
+          "creationDate": "2025-04-02T00:00:00.000Z"
+        }
+      },
+      "r2": {
+        "id": "740582-740582_10",
+        "type": "HAS_ITEM",
+        "source": "740582",
+        "target": "740582_10",
+        "properties": {}
+      },
+      "i": {
+        "id": "740582_10",
+        "labels": [
+          "SalesOrderItem"
+        ],
+        "properties": {
+          "itemNumber": "10",
+          "material": "S8907367001003",
+          "netAmount": "216.1",
+          "plant": "WB05",
+          "requestedQuantity": "1",
+          "storageLocation": "5031",
+          "currency": "INR",
+          "id": "740582_10",
+          "salesOrder": "740582"
+        }
+      },
+      "r3": {
+        "id": "740582_10-S8907367001003",
+        "type": "IS_PRODUCT",
+        "source": "740582_10",
+        "target": "S8907367001003",
+        "properties": {}
+      },
+      "p": {
+        "id": "S8907367001003",
+        "labels": [
+          "Product"
+        ],
+        "properties": {
+          "baseUnit": "PC",
+          "netWeight": "0.01",
+          "description": "BEARDOIL 30ML ALMOND+THYME",
+          "id": "S8907367001003",
+          "creationDate": "2024-11-26T00:00:00.000Z",
+          "type": "ZFS1",
+          "group": "ZFG1001"
+        }
+      }
+    },
+    {
+      "c": {
+        "id": "320000083",
+        "labels": [
+          "Customer"
+        ],
+        "properties": {
+          "name": "Nelson, Fitzpatrick and Jordan",
+          "isBlocked": true,
+          "id": "320000083",
+          "category": "2",
+          "creationDate": "2024-11-20T00:00:00.000Z"
+        }
+      },
+      "r1": {
+        "id": "320000083-740583",
+        "type": "PLACED",
+        "source": "320000083",
+        "target": "740583",
+        "properties": {}
+      },
+      "o": {
+        "id": "740583",
+        "labels": [
+          "SalesOrder"
+        ],
+        "properties": {
+          "salesOrderType": "OR",
+          "transactionCurrency": "INR",
+          "overallDeliveryStatus": "C",
+          "totalNetAmount": "216.1",
+          "id": "740583",
+          "creationDate": "2025-04-02T00:00:00.000Z"
+        }
+      },
+      "r2": {
+        "id": "740583-740583_10",
+        "type": "HAS_ITEM",
+        "source": "740583",
+        "target": "740583_10",
+        "properties": {}
+      },
+      "i": {
+        "id": "740583_10",
+        "labels": [
+          "SalesOrderItem"
+        ],
+        "properties": {
+          "itemNumber": "10",
+          "material": "S8907367001003",
+          "netAmount": "216.1",
+          "plant": "WB05",
+          "requestedQuantity": "1",
+          "storageLocation": "5031",
+          "currency": "INR",
+          "id": "740583_10",
+          "salesOrder": "740583"
+        }
+      },
+      "r3": {
+        "id": "740583_10-S8907367001003",
+        "type": "IS_PRODUCT",
+        "source": "740583_10",
+        "target": "S8907367001003",
+        "properties": {}
+      },
+      "p": {
+        "id": "S8907367001003",
+        "labels": [
+          "Product"
+        ],
+        "properties": {
+          "baseUnit": "PC",
+          "netWeight": "0.01",
+          "description": "BEARDOIL 30ML ALMOND+THYME",
+          "id": "S8907367001003",
+          "creationDate": "2024-11-26T00:00:00.000Z",
+          "type": "ZFS1",
+          "group": "ZFG1001"
+        }
+      }
+    },
+    {
+      "c": {
+        "id": "320000108",
+        "labels": [
+          "Customer"
+        ],
+        "properties": {
+          "name": "Melton Group",
+          "isBlocked": true,
+          "id": "320000108",
+          "category": "2",
+          "creationDate": "2024-11-20T00:00:00.000Z"
+        }
+      },
+      "r1": {
+        "id": "320000108-740596",
+        "type": "PLACED",
+        "source": "320000108",
+        "target": "740596",
+        "properties": {}
+      },
+      "o": {
+        "id": "740596",
+        "labels": [
+          "SalesOrder"
+        ],
+        "properties": {
+          "salesOrderType": "OR",
+          "transactionCurrency": "INR",
+          "overallDeliveryStatus": "A",
+          "totalNetAmount": "202.54",
+          "id": "740596",
+          "creationDate": "2025-04-02T00:00:00.000Z"
+        }
+      },
+      "r2": {
+        "id": "740596-740596_10",
+        "type": "HAS_ITEM",
+        "source": "740596",
+        "target": "740596_10",
+        "properties": {}
+      },
+      "i": {
+        "id": "740596_10",
+        "labels": [
+          "SalesOrderItem"
+        ],
+        "properties": {
+          "itemNumber": "10",
+          "material": "S8907367001003",
+          "netAmount": "202.54",
+          "plant": "TM05",
+          "requestedQuantity": "1",
+          "storageLocation": "5099",
+          "currency": "INR",
+          "id": "740596_10",
+          "salesOrder": "740596"
+        }
+      },
+      "r3": {
+        "id": "740596_10-S8907367001003",
+        "type": "IS_PRODUCT",
+        "source": "740596_10",
+        "target": "S8907367001003",
+        "properties": {}
+      },
+      "p": {
+        "id": "S8907367001003",
+        "labels": [
+          "Product"
+        ],
+        "properties": {
+          "baseUnit": "PC",
+          "netWeight": "0.01",
+          "description": "BEARDOIL 30ML ALMOND+THYME",
+          "id": "S8907367001003",
+          "creationDate": "2024-11-26T00:00:00.000Z",
+          "type": "ZFS1",
+          "group": "ZFG1001"
+        }
+      }
+    }
+  ],
+  "table": [
+    {
+      "Customer_name": "Cardenas, Parker and Avila",
+      "Customer_isBlocked": false,
+      "Customer_id": "310000108",
+      "Customer_category": "2",
+      "Customer_creationDate": "2024-04-16T00:00:00.000Z",
+      "SalesOrder_salesOrderType": "OR",
+      "SalesOrder_transactionCurrency": "INR",
+      "SalesOrder_overallDeliveryStatus": "C",
+      "SalesOrder_totalNetAmount": "17108.25",
+      "SalesOrder_id": "740506",
+      "SalesOrder_creationDate": "2025-03-31T00:00:00.000Z",
+      "SalesOrderItem_itemNumber": "10",
+      "SalesOrderItem_material": "S8907367001003",
+      "SalesOrderItem_netAmount": "9966.1",
+      "SalesOrderItem_plant": "1920",
+      "SalesOrderItem_requestedQuantity": "48",
+      "SalesOrderItem_storageLocation": "V2S2",
+      "SalesOrderItem_currency": "INR",
+      "SalesOrderItem_id": "740506_10",
+      "SalesOrderItem_salesOrder": "740506",
+      "Product_baseUnit": "PC",
+      "Product_netWeight": "0.01",
+      "Product_description": "BEARDOIL 30ML ALMOND+THYME",
+      "Product_id": "S8907367001003",
+      "Product_creationDate": "2024-11-26T00:00:00.000Z",
+      "Product_type": "ZFS1",
+      "Product_group": "ZFG1001"
+    },
+    {
+      "Customer_name": "Bradley-Kelley",
+      "Customer_isBlocked": false,
+      "Customer_id": "310000109",
+      "Customer_category": "2",
+      "Customer_creationDate": "2024-04-16T00:00:00.000Z",
+      "SalesOrder_salesOrderType": "OR",
+      "SalesOrder_transactionCurrency": "INR",
+      "SalesOrder_overallDeliveryStatus": "C",
+      "SalesOrder_totalNetAmount": "19021.27",
+      "SalesOrder_id": "740507",
+      "SalesOrder_creationDate": "2025-03-31T00:00:00.000Z",
+      "SalesOrderItem_itemNumber": "10",
+      "SalesOrderItem_material": "S8907367001003",
+      "SalesOrderItem_netAmount": "4983.05",
+      "SalesOrderItem_plant": "1920",
+      "SalesOrderItem_requestedQuantity": "24",
+      "SalesOrderItem_storageLocation": "V2S2",
+      "SalesOrderItem_currency": "INR",
+      "SalesOrderItem_id": "740507_10",
+      "SalesOrderItem_salesOrder": "740507",
+      "Product_baseUnit": "PC",
+      "Product_netWeight": "0.01",
+      "Product_description": "BEARDOIL 30ML ALMOND+THYME",
+      "Product_id": "S8907367001003",
+      "Product_creationDate": "2024-11-26T00:00:00.000Z",
+      "Product_type": "ZFS1",
+      "Product_group": "ZFG1001"
+    },
+    {
+      "Customer_name": "Bradley-Kelley",
+      "Customer_isBlocked": false,
+      "Customer_id": "310000109",
+      "Customer_category": "2",
+      "Customer_creationDate": "2024-04-16T00:00:00.000Z",
+      "SalesOrder_salesOrderType": "OR",
+      "SalesOrder_transactionCurrency": "INR",
+      "SalesOrder_overallDeliveryStatus": "C",
+      "SalesOrder_totalNetAmount": "883.88",
+      "SalesOrder_id": "740508",
+      "SalesOrder_creationDate": "2025-03-31T00:00:00.000Z",
+      "SalesOrderItem_itemNumber": "10",
+      "SalesOrderItem_material": "S8907367001003",
+      "SalesOrderItem_netAmount": "207.63",
+      "SalesOrderItem_plant": "1920",
+      "SalesOrderItem_requestedQuantity": "1",
+      "SalesOrderItem_storageLocation": "V2S2",
+      "SalesOrderItem_currency": "INR",
+      "SalesOrderItem_id": "740508_10",
+      "SalesOrderItem_salesOrder": "740508",
+      "Product_baseUnit": "PC",
+      "Product_netWeight": "0.01",
+      "Product_description": "BEARDOIL 30ML ALMOND+THYME",
+      "Product_id": "S8907367001003",
+      "Product_creationDate": "2024-11-26T00:00:00.000Z",
+      "Product_type": "ZFS1",
+      "Product_group": "ZFG1001"
+    },
+    {
+      "Customer_name": "Nelson, Fitzpatrick and Jordan",
+      "Customer_isBlocked": true,
+      "Customer_id": "320000083",
+      "Customer_category": "2",
+      "Customer_creationDate": "2024-11-20T00:00:00.000Z",
+      "SalesOrder_salesOrderType": "OR",
+      "SalesOrder_transactionCurrency": "INR",
+      "SalesOrder_overallDeliveryStatus": "C",
+      "SalesOrder_totalNetAmount": "250",
+      "SalesOrder_id": "740511",
+      "SalesOrder_creationDate": "2025-04-02T00:00:00.000Z",
+      "SalesOrderItem_itemNumber": "10",
+      "SalesOrderItem_material": "S8907367001003",
+      "SalesOrderItem_netAmount": "250",
+      "SalesOrderItem_plant": "WB05",
+      "SalesOrderItem_requestedQuantity": "1",
+      "SalesOrderItem_storageLocation": "5101",
+      "SalesOrderItem_currency": "INR",
+      "SalesOrderItem_id": "740511_10",
+      "SalesOrderItem_salesOrder": "740511",
+      "Product_baseUnit": "PC",
+      "Product_netWeight": "0.01",
+      "Product_description": "BEARDOIL 30ML ALMOND+THYME",
+      "Product_id": "S8907367001003",
+      "Product_creationDate": "2024-11-26T00:00:00.000Z",
+      "Product_type": "ZFS1",
+      "Product_group": "ZFG1001"
+    },
+    {
+      "Customer_name": "Nelson, Fitzpatrick and Jordan",
+      "Customer_isBlocked": true,
+      "Customer_id": "320000083",
+      "Customer_category": "2",
+      "Customer_creationDate": "2024-11-20T00:00:00.000Z",
+      "SalesOrder_salesOrderType": "OR",
+      "SalesOrder_transactionCurrency": "INR",
+      "SalesOrder_overallDeliveryStatus": "C",
+      "SalesOrder_totalNetAmount": "216.1",
+      "SalesOrder_id": "740529",
+      "SalesOrder_creationDate": "2025-04-02T00:00:00.000Z",
+      "SalesOrderItem_itemNumber": "10",
+      "SalesOrderItem_material": "S8907367001003",
+      "SalesOrderItem_netAmount": "216.1",
+      "SalesOrderItem_plant": "WB05",
+      "SalesOrderItem_requestedQuantity": "1",
+      "SalesOrderItem_storageLocation": "5101",
+      "SalesOrderItem_currency": "INR",
+      "SalesOrderItem_id": "740529_10",
+      "SalesOrderItem_salesOrder": "740529",
+      "Product_baseUnit": "PC",
+      "Product_netWeight": "0.01",
+      "Product_description": "BEARDOIL 30ML ALMOND+THYME",
+      "Product_id": "S8907367001003",
+      "Product_creationDate": "2024-11-26T00:00:00.000Z",
+      "Product_type": "ZFS1",
+      "Product_group": "ZFG1001"
+    },
+    {
+      "Customer_name": "Nelson, Fitzpatrick and Jordan",
+      "Customer_isBlocked": true,
+      "Customer_id": "320000083",
+      "Customer_category": "2",
+      "Customer_creationDate": "2024-11-20T00:00:00.000Z",
+      "SalesOrder_salesOrderType": "OR",
+      "SalesOrder_transactionCurrency": "INR",
+      "SalesOrder_overallDeliveryStatus": "C",
+      "SalesOrder_totalNetAmount": "216.1",
+      "SalesOrder_id": "740552",
+      "SalesOrder_creationDate": "2025-04-02T00:00:00.000Z",
+      "SalesOrderItem_itemNumber": "10",
+      "SalesOrderItem_material": "S8907367001003",
+      "SalesOrderItem_netAmount": "216.1",
+      "SalesOrderItem_plant": "WB05",
+      "SalesOrderItem_requestedQuantity": "1",
+      "SalesOrderItem_storageLocation": "5101",
+      "SalesOrderItem_currency": "INR",
+      "SalesOrderItem_id": "740552_10",
+      "SalesOrderItem_salesOrder": "740552",
+      "Product_baseUnit": "PC",
+      "Product_netWeight": "0.01",
+      "Product_description": "BEARDOIL 30ML ALMOND+THYME",
+      "Product_id": "S8907367001003",
+      "Product_creationDate": "2024-11-26T00:00:00.000Z",
+      "Product_type": "ZFS1",
+      "Product_group": "ZFG1001"
+    },
+    {
+      "Customer_name": "Nelson, Fitzpatrick and Jordan",
+      "Customer_isBlocked": true,
+      "Customer_id": "320000083",
+      "Customer_category": "2",
+      "Customer_creationDate": "2024-11-20T00:00:00.000Z",
+      "SalesOrder_salesOrderType": "OR",
+      "SalesOrder_transactionCurrency": "INR",
+      "SalesOrder_overallDeliveryStatus": "C",
+      "SalesOrder_totalNetAmount": "216.1",
+      "SalesOrder_id": "740582",
+      "SalesOrder_creationDate": "2025-04-02T00:00:00.000Z",
+      "SalesOrderItem_itemNumber": "10",
+      "SalesOrderItem_material": "S8907367001003",
+      "SalesOrderItem_netAmount": "216.1",
+      "SalesOrderItem_plant": "WB05",
+      "SalesOrderItem_requestedQuantity": "1",
+      "SalesOrderItem_storageLocation": "5031",
+      "SalesOrderItem_currency": "INR",
+      "SalesOrderItem_id": "740582_10",
+      "SalesOrderItem_salesOrder": "740582",
+      "Product_baseUnit": "PC",
+      "Product_netWeight": "0.01",
+      "Product_description": "BEARDOIL 30ML ALMOND+THYME",
+      "Product_id": "S8907367001003",
+      "Product_creationDate": "2024-11-26T00:00:00.000Z",
+      "Product_type": "ZFS1",
+      "Product_group": "ZFG1001"
+    },
+    {
+      "Customer_name": "Nelson, Fitzpatrick and Jordan",
+      "Customer_isBlocked": true,
+      "Customer_id": "320000083",
+      "Customer_category": "2",
+      "Customer_creationDate": "2024-11-20T00:00:00.000Z",
+      "SalesOrder_salesOrderType": "OR",
+      "SalesOrder_transactionCurrency": "INR",
+      "SalesOrder_overallDeliveryStatus": "C",
+      "SalesOrder_totalNetAmount": "216.1",
+      "SalesOrder_id": "740583",
+      "SalesOrder_creationDate": "2025-04-02T00:00:00.000Z",
+      "SalesOrderItem_itemNumber": "10",
+      "SalesOrderItem_material": "S8907367001003",
+      "SalesOrderItem_netAmount": "216.1",
+      "SalesOrderItem_plant": "WB05",
+      "SalesOrderItem_requestedQuantity": "1",
+      "SalesOrderItem_storageLocation": "5031",
+      "SalesOrderItem_currency": "INR",
+      "SalesOrderItem_id": "740583_10",
+      "SalesOrderItem_salesOrder": "740583",
+      "Product_baseUnit": "PC",
+      "Product_netWeight": "0.01",
+      "Product_description": "BEARDOIL 30ML ALMOND+THYME",
+      "Product_id": "S8907367001003",
+      "Product_creationDate": "2024-11-26T00:00:00.000Z",
+      "Product_type": "ZFS1",
+      "Product_group": "ZFG1001"
+    },
+    {
+      "Customer_name": "Melton Group",
+      "Customer_isBlocked": true,
+      "Customer_id": "320000108",
+      "Customer_category": "2",
+      "Customer_creationDate": "2024-11-20T00:00:00.000Z",
+      "SalesOrder_salesOrderType": "OR",
+      "SalesOrder_transactionCurrency": "INR",
+      "SalesOrder_overallDeliveryStatus": "A",
+      "SalesOrder_totalNetAmount": "202.54",
+      "SalesOrder_id": "740596",
+      "SalesOrder_creationDate": "2025-04-02T00:00:00.000Z",
+      "SalesOrderItem_itemNumber": "10",
+      "SalesOrderItem_material": "S8907367001003",
+      "SalesOrderItem_netAmount": "202.54",
+      "SalesOrderItem_plant": "TM05",
+      "SalesOrderItem_requestedQuantity": "1",
+      "SalesOrderItem_storageLocation": "5099",
+      "SalesOrderItem_currency": "INR",
+      "SalesOrderItem_id": "740596_10",
+      "SalesOrderItem_salesOrder": "740596",
+      "Product_baseUnit": "PC",
+      "Product_netWeight": "0.01",
+      "Product_description": "BEARDOIL 30ML ALMOND+THYME",
+      "Product_id": "S8907367001003",
+      "Product_creationDate": "2024-11-26T00:00:00.000Z",
+      "Product_type": "ZFS1",
+      "Product_group": "ZFG1001"
+    }
+  ],
+  "response": "ORDER SUMMARY:\nOrder ID: [740596]\nDate: [2025-04-02T00:00:00.000Z]\nTotal: [$308.10 INR]\n\nPRODUCTS:\n- BEARDOIL 30ML ALMOND+THYME (Qty: 5)\n\nDELIVERY STATUS:\n- Status: C (Completed)\n\nPAYMENT STATUS: N/A\n\nINSIGHTS:\n- Five customers ordered the almond and thyme beard oil.",
+  "error": null
+}

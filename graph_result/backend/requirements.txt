@@ -1,0 +1,7 @@
+fastapi[all]
+neo4j
+langchain
+langgraph
+langchain-ollama
+python-dotenv
+pandas

@@ -1,0 +1,15 @@
+--- CUSTOMERS ---
+{"name": "Cardenas, Parker and Avila", "isBlocked": false, "id": "310000108", "category": "2", "creationDate": "2024-04-16T00:00:00.000Z"}
+{"name": "Bradley-Kelley", "isBlocked": false, "id": "310000109", "category": "2", "creationDate": "2024-04-16T00:00:00.000Z"}
+{"name": "Nguyen-Davis", "isBlocked": true, "id": "320000082", "category": "2", "creationDate": "2024-11-20T00:00:00.000Z"}
+--- MATERIALS ---
+--- SALES ORDERS ---
+{"salesOrderType": "OR", "transactionCurrency": "INR", "overallDeliveryStatus": "C", "totalNetAmount": "17108.25", "id": "740506", "creationDate": "2025-03-31T00:00:00.000Z"}
+{"salesOrderType": "OR", "transactionCurrency": "INR", "overallDeliveryStatus": "C", "totalNetAmount": "19021.27", "id": "740507", "creationDate": "2025-03-31T00:00:00.000Z"}
+{"salesOrderType": "OR", "transactionCurrency": "INR", "overallDeliveryStatus": "C", "totalNetAmount": "883.88", "id": "740508", "creationDate": "2025-03-31T00:00:00.000Z"}
+{"salesOrderType": "OR", "transactionCurrency": "INR", "overallDeliveryStatus": "C", "totalNetAmount": "229.66", "id": "740509", "creationDate": "2025-04-02T00:00:00.000Z"}
+{"salesOrderType": "OR", "transactionCurrency": "INR", "overallDeliveryStatus": "C", "totalNetAmount": "221.19", "id": "740510", "creationDate": "2025-04-02T00:00:00.000Z"}
+--- SALES ORDER ITEMS ---
+{"itemNumber": "10", "material": "S8907367001003", "netAmount": "9966.1", "plant": "1920", "requestedQuantity": "48", "storageLocation": "V2S2", "currency": "INR", "id": "740506_10", "salesOrder": "740506"}
+{"itemNumber": "20", "material": "S8907367000327", "netAmount": "2366.95", "plant": "1920", "requestedQuantity": "10", "storageLocation": "V2S2", "currency": "INR", "id": "740506_20", "salesOrder": "740506"}
+{"itemNumber": "30", "material": "S8907367020073", "netAmount": "1181.69", "plant": "1920", "requestedQuantity": "8", "storageLocation": "V2S2", "currency": "INR", "id": "740506_30", "salesOrder": "740506"}
