@@ -17,6 +17,7 @@ import { fetchWorkspaces } from "../features/workspaceSlice";
 const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showAdminSetup, setShowAdminSetup] = useState(false);
+  const [waitingForWorkspace, setWaitingForWorkspace] = useState(false);
   const { loading, workspaces, currentWorkspace } = useSelector(
     (state) => state.workspace
   );
@@ -33,18 +34,39 @@ const Layout = () => {
     dispatch(loadTheme());
   }, []);
 
-  // Fetch workspaces once user is loaded — independent of Clerk org
+  // Fetch workspaces once user is loaded
   useEffect(() => {
     if (isLoaded && user) {
       dispatch(fetchWorkspaces({ getToken }));
     }
   }, [user, isLoaded]);
 
-  // Re-fetch when Clerk org changes (after admin creates org)
+  // When a Clerk org is created the Inngest webhook runs async, so the DB
+  // workspace record may not exist immediately. Poll up to 8 times (4 s total)
+  // until it appears, then stop.
   useEffect(() => {
-    if (isLoaded && user && organization?.id) {
-      dispatch(fetchWorkspaces({ getToken }));
-    }
+    if (!isLoaded || !user || !organization?.id) return;
+
+    setWaitingForWorkspace(true);
+    let attempts = 0;
+    const MAX = 12;
+    const INTERVAL = 500; // ms
+
+    const poll = setInterval(async () => {
+      attempts += 1;
+      const result = await dispatch(fetchWorkspaces({ getToken }));
+      const workspaces = result?.payload ?? [];
+
+      if (workspaces.length > 0 || attempts >= MAX) {
+        clearInterval(poll);
+        setWaitingForWorkspace(false);
+        if (workspaces.length > 0) {
+          setShowAdminSetup(false);
+        }
+      }
+    }, INTERVAL);
+
+    return () => clearInterval(poll);
   }, [organization?.id]);
 
   // Not loaded yet — show spinner
@@ -73,6 +95,21 @@ const Layout = () => {
 
   // User is logged in but has no workspace yet
   if (user && isLoaded && workspaces.length === 0) {
+    // Admin: show waiting spinner while Inngest syncs the workspace
+    if (waitingForWorkspace) {
+      return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-zinc-950 gap-4">
+          <Loader2Icon className="size-8 text-blue-500 animate-spin" />
+          <p className="text-sm font-medium text-gray-700 dark:text-zinc-300">
+            Setting up your workspace&hellip;
+          </p>
+          <p className="text-xs text-gray-400 dark:text-zinc-500">
+            This usually takes a few seconds.
+          </p>
+        </div>
+      );
+    }
+
     // Admin: show Clerk CreateOrganization
     if (showAdminSetup) {
       return (
