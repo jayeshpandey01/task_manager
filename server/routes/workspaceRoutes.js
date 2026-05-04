@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  createWorkspace,
   addMember,
   getUserWorkspaces,
   blockMember,
@@ -9,6 +10,7 @@ import {
 const workspaceRouter = express.Router();
 
 workspaceRouter.get("/", getUserWorkspaces);
+workspaceRouter.post("/", createWorkspace);
 workspaceRouter.post("/add-member", addMember);
 workspaceRouter.put("/member/:memberId/block", blockMember);
 workspaceRouter.put("/member/:memberId/score", updateMemberScore);

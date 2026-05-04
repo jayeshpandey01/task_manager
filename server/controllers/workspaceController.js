@@ -1,4 +1,68 @@
 import prisma from "../configs/prisma.js";
+import { createClerkClient } from "@clerk/express";
+
+const clerkClient = createClerkClient({
+  secretKey: process.env.CLERK_SECRET_KEY,
+});
+
+// Create workspace directly (fallback for when Clerk webhook / Inngest is not reachable in local dev)
+export const createWorkspace = async (req, res) => {
+  try {
+    const { userId } = await req.auth();
+    const { id, name, slug, image_url } = req.body;
+
+    if (!id || !name || !slug) {
+      return res.status(400).json({ message: "id, name, and slug are required" });
+    }
+
+    // --- Step 1: Ensure the User record exists in our DB ---
+    // In local dev the Clerk user.created webhook never fires, so we upsert
+    // the user from the Clerk API before touching any FK-constrained tables.
+    const clerkUser = await clerkClient.users.getUser(userId);
+    await prisma.user.upsert({
+      where: { id: userId },
+      update: {
+        name: `${clerkUser.firstName ?? ""} ${clerkUser.lastName ?? ""}`.trim() || clerkUser.username || "Admin",
+        image: clerkUser.imageUrl || "",
+      },
+      create: {
+        id: userId,
+        email: clerkUser.emailAddresses[0]?.emailAddress ?? "",
+        name: `${clerkUser.firstName ?? ""} ${clerkUser.lastName ?? ""}`.trim() || clerkUser.username || "Admin",
+        image: clerkUser.imageUrl || "",
+      },
+    });
+
+    // --- Step 2: Upsert workspace (idempotent) ---
+    const workspace = await prisma.workspace.upsert({
+      where: { id },
+      update: {},
+      create: {
+        id,
+        name,
+        slug,
+        ownerId: userId,
+        image_url: image_url || "",
+      },
+    });
+
+    // --- Step 3: Upsert creator as ADMIN member ---
+    await prisma.workspaceMember.upsert({
+      where: { userId_workspaceId: { userId, workspaceId: id } },
+      update: {},
+      create: {
+        userId,
+        workspaceId: id,
+        role: "ADMIN",
+      },
+    });
+
+    res.status(201).json({ workspace });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.code || error.message });
+  }
+};
 
 // Get all workspaces for user
 export const getUserWorkspaces = async (req, res) => {

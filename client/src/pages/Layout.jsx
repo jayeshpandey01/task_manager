@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -13,11 +13,14 @@ import {
   useClerk,
 } from "@clerk/clerk-react";
 import { fetchWorkspaces } from "../features/workspaceSlice";
+import api from "../configs/api";
+import toast from "react-hot-toast";
 
 const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showAdminSetup, setShowAdminSetup] = useState(false);
-  const [waitingForWorkspace, setWaitingForWorkspace] = useState(false);
+  const [creatingWorkspace, setCreatingWorkspace] = useState(false);
+
   const { loading, workspaces, currentWorkspace } = useSelector(
     (state) => state.workspace
   );
@@ -41,32 +44,45 @@ const Layout = () => {
     }
   }, [user, isLoaded]);
 
-  // When a Clerk org is created the Inngest webhook runs async, so the DB
-  // workspace record may not exist immediately. Poll up to 8 times (4 s total)
-  // until it appears, then stop.
+  // Called once the Clerk org object is available after CreateOrganization completes.
+  // Instead of waiting for the Inngest webhook (which requires a public URL),
+  // we directly POST to our backend to persist the workspace immediately.
+  const handleOrgCreated = useCallback(async () => {
+    if (!organization) return;
+    setCreatingWorkspace(true);
+    try {
+      const token = await getToken();
+      await api.post(
+        "/api/workspaces",
+        {
+          id: organization.id,
+          name: organization.name,
+          slug: organization.slug,
+          image_url: organization.imageUrl || "",
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // Re-fetch so Redux state is fully populated (includes members / projects)
+      await dispatch(fetchWorkspaces({ getToken }));
+      setShowAdminSetup(false);
+    } catch (err) {
+      console.error("createWorkspace error:", err);
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to create workspace";
+      toast.error(msg);
+    } finally {
+      setCreatingWorkspace(false);
+    }
+  }, [organization, getToken, dispatch]);
+
+  // Fire once the Clerk org object appears after CreateOrganization completes.
+  // We use a ref to guard against double-fires (React Strict Mode).
   useEffect(() => {
-    if (!isLoaded || !user || !organization?.id) return;
-
-    setWaitingForWorkspace(true);
-    let attempts = 0;
-    const MAX = 12;
-    const INTERVAL = 500; // ms
-
-    const poll = setInterval(async () => {
-      attempts += 1;
-      const result = await dispatch(fetchWorkspaces({ getToken }));
-      const workspaces = result?.payload ?? [];
-
-      if (workspaces.length > 0 || attempts >= MAX) {
-        clearInterval(poll);
-        setWaitingForWorkspace(false);
-        if (workspaces.length > 0) {
-          setShowAdminSetup(false);
-        }
-      }
-    }, INTERVAL);
-
-    return () => clearInterval(poll);
+    if (organization?.id) {
+      handleOrgCreated();
+    }
   }, [organization?.id]);
 
   // Redirect unauthenticated users to login page
@@ -85,33 +101,26 @@ const Layout = () => {
     );
   }
 
-  // Loading workspaces
-  if (loading) {
+  // Loading workspaces or actively creating one
+  if (loading || creatingWorkspace) {
     return (
-      <div className="flex items-center justify-center h-screen bg-white dark:bg-zinc-950">
-        <Loader2Icon className="size-7 text-blue-500 animate-spin" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-zinc-950 gap-4">
+        <Loader2Icon className="size-8 text-blue-500 animate-spin" />
+        <p className="text-sm font-medium text-gray-700 dark:text-zinc-300">
+          {creatingWorkspace ? "Setting up your workspace\u2026" : "Loading\u2026"}
+        </p>
+        {creatingWorkspace && (
+          <p className="text-xs text-gray-400 dark:text-zinc-500">
+            This usually takes a few seconds.
+          </p>
+        )}
       </div>
     );
   }
 
   // User is logged in but has no workspace yet
   if (user && isLoaded && workspaces.length === 0) {
-    // Admin: show waiting spinner while Inngest syncs the workspace
-    if (waitingForWorkspace) {
-      return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-zinc-950 gap-4">
-          <Loader2Icon className="size-8 text-blue-500 animate-spin" />
-          <p className="text-sm font-medium text-gray-700 dark:text-zinc-300">
-            Setting up your workspace&hellip;
-          </p>
-          <p className="text-xs text-gray-400 dark:text-zinc-500">
-            This usually takes a few seconds.
-          </p>
-        </div>
-      );
-    }
-
-    // Admin: show Clerk CreateOrganization
+    // Show the Clerk CreateOrganization widget when admin clicks "I am an Admin"
     if (showAdminSetup) {
       return (
         <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50 dark:bg-zinc-950 gap-5 p-4">
