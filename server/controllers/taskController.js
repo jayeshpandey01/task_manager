@@ -120,6 +120,41 @@ export const updateTask = async (req, res) => {
   }
 };
 
+// Accept task (member accepting their assigned task)
+export const acceptTask = async (req, res) => {
+  try {
+    const { userId } = await req.auth();
+    const task = await prisma.task.findUnique({
+      where: { id: req.params.id },
+    });
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    if (task.assigneeId !== userId) {
+      return res
+        .status(403)
+        .json({ message: "Only the assigned member can accept this task" });
+    }
+
+    if (task.isAccepted) {
+      return res.status(400).json({ message: "Task is already accepted" });
+    }
+
+    const updatedTask = await prisma.task.update({
+      where: { id: req.params.id },
+      data: { isAccepted: true, acceptedAt: new Date() },
+      include: { assignee: true },
+    });
+
+    res.json({ task: updatedTask, message: "Task accepted successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.code || error.message });
+  }
+};
+
 // Delete task
 export const deleteTask = async (req, res) => {
   try {

@@ -1,11 +1,13 @@
 import { format } from "date-fns";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { CalendarIcon, MessageCircle, PenIcon, Github } from "lucide-react";
+import { CalendarIcon, MessageCircle, PenIcon, Github, CheckCircle2 } from "lucide-react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import api from "../configs/api";
+import TaskTimer from "../components/TaskTimer";
+import { updateTask } from "../features/workspaceSlice";
 
 const TaskDetails = () => {
   const [searchParams] = useSearchParams();
@@ -14,11 +16,13 @@ const TaskDetails = () => {
 
   const { user } = useUser();
   const { getToken } = useAuth();
+  const dispatch = useDispatch();
   const [task, setTask] = useState(null);
   const [project, setProject] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(true);
+  const [accepting, setAccepting] = useState(false);
 
   const { currentWorkspace } = useSelector((state) => state.workspace);
 

@@ -80,6 +80,8 @@ model WorkspaceMember {
     workspaceId String
     message     String        @default("")
     role        WorkspaceRole @default(MEMBER)
+    score       Int           @default(0)
+    isBlocked   Boolean       @default(false)
     user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
     workspace   Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
@@ -127,6 +129,8 @@ model Task {
     assigneeId  String
     due_date    DateTime
     github_url  String?
+    isAccepted  Boolean    @default(false)
+    acceptedAt  DateTime?
     createdAt   DateTime   @default(now())
     updatedAt   DateTime   @updatedAt
 
