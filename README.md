@@ -1,375 +1,256 @@
-<div align="center">
+# TaskManager 🗂️
 
-<h1><sup>💼</sup>Project Management Platform<sub>📊</sub> </h1>
+A full-stack **project management platform** with dual-role workspaces — Admins manage teams, projects, and tasks while Members track their assignments with live timers and GitHub integration.
 
-Modern Full-Stack Project Management with Real-time Collaboration & Automated Notifications
-
-![Last Commit](https://img.shields.io/github/last-commit/elyse502/project-management?style=flat-square)
-![Languages](https://img.shields.io/github/languages/top/elyse502/project-management?style=flat-square&color=blue)
-![License](https://img.shields.io/badge/license-ISC-blue?style=flat-square)
-![Version](https://img.shields.io/badge/version-1.0.0-success?style=flat-square)
-
-**Built with cutting-edge technologies for modern team collaboration:**
-
-![React](https://img.shields.io/badge/React-19.1.1-61DAFB?style=flat-square&logo=react&logoColor=black)
-![Express](https://img.shields.io/badge/Express-5.4.1-000000?style=flat-square&logo=express&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
-![Clerk](https://img.shields.io/badge/Clerk-6C47FF?style=flat-square&logo=clerk&logoColor=white)
-![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat-square&logo=prisma&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
-
-## 🚀 Live Demo
-
-Visit the 👉 [_LINK 🔗_](https://project-management-three-dusky.vercel.app)
-
-| Dashboard View              | Project Management       |
-| --------------------------- | ------------------------ |
-| ![Dashboard](dashboard.png) | ![Projects](project.png) |
-
-</div>
-
----
-
-## 📋 Table of Contents
-
-- [✨ Features](#-features)
-- [🛠 Tech Stack](#-tech-stack)
-- [🏗️ Project Structure](#-project-structure)
-- [⚡ Getting Started](#-getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Backend Setup](#backend-setup)
-  - [Frontend Setup](#frontend-setup)
-  - [Environment Variables](#environment-variables)
-- [🗄️ Database Schema](#-database-schema)
-- [📡 API Endpoints](#-api-endpoints)
-- [🔄 Background Jobs](#-background-jobs)
-- [🎨 UI/UX Features](#-uiux-features)
-- [🚀 Deployment](#-deployment)
-- [📊 Future Enhancements](#-future-enhancements)
-- [📝 License](#-license)
-- [🤝 Contributing](#-contributing)
+![Stack](https://img.shields.io/badge/React-18-blue?logo=react) ![Node](https://img.shields.io/badge/Node.js-Express-green?logo=node.js) ![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?logo=postgresql) ![Clerk](https://img.shields.io/badge/Auth-Clerk-6C47FF?logo=clerk)
 
 ---
 
 ## ✨ Features
 
-### 🏢 Organization Management
+### 👑 Admin
+- Create & manage **Workspaces** (backed by Clerk Organizations)
+- Full **Project lifecycle** management — status, priority, dates, progress
+- Create **Tasks** with type, priority, due date, assignee, and **GitHub issue URL**
+- **Block / Unblock** team members instantly
+- Set & edit **Performance Scores** (0–100) per member
+- View **Team Performance** panel with per-member completion rates
+- Invite members via email
 
-- Create multiple organizations
-- Invite and manage team members
-- Role-based access control
-- Workspace isolation
+### 👤 Member
+- **Personal Dashboard** — see only assigned tasks
+- **Accept tasks** → live elapsed timer starts automatically
+- **GitHub issue link** surfaces alongside the timer for quick repo access
+- **Performance Score** badge displayed on dashboard
+- Task calendar & analytics views
 
-### 📋 Project & Task Management
-
-- Create and manage projects
-- Create tasks with assignees and due dates
-- Task prioritization and categorization
-- Real-time project updates
-
-### 🔔 Smart Notifications
-
-- Email notifications for new task assignments
-- Due date reminder emails
-- Real-time in-app notifications
-- Background job processing with Inngest
-
-### 👥 Team Collaboration
-
-- Invite team members via email
-- Assign tasks to team members
-- Track team activity and performance
-- Project analytics and insights
+### 🔐 Auth & Access
+- Clerk-powered authentication (sign-up, sign-in, org creation)
+- **Role-based access control** — enforced on both frontend (React) and backend (Express middleware)
+- Blocked members see a locked screen on login
 
 ---
 
-## 🛠 Tech Stack
+## 🛠️ Tech Stack
 
-### Frontend
-
-![React](https://img.shields.io/badge/React-19.1.1-61DAFB?logo=react&logoColor=white)
-![Redux Toolkit](https://img.shields.io/badge/Redux_Toolkit-2.8.2-764ABC?logo=redux&logoColor=white)
-![React Router](https://img.shields.io/badge/React_Router-7.8.1-CA4245?logo=reactrouter&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.12-06B6D4?logo=tailwindcss&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-7.1.2-646CFF?logo=vite&logoColor=white)
-![Axios](https://img.shields.io/badge/Axios-4.1.3-5A29E4?logo=axios&logoColor=white)
-
-### Backend
-
-![Node.js](https://img.shields.io/badge/Node.js-LTS-339933?logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/Express.js-5.4.1-000000?logo=express&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)
-![Prisma](https://img.shields.io/badge/Prisma-6.19.1-2D3748?logo=prisma&logoColor=white)
-
-### Services & APIs
-
-![Clerk](https://img.shields.io/badge/Clerk-5.59.2-6C47FF?logo=clerk&logoColor=white)
-![Inngest](https://img.shields.io/badge/Inngest-Background_Jobs-FF6B6B)
-![Neon PostgreSQL](https://img.shields.io/badge/Neon-PostgreSQL-00E599?logo=neon&logoColor=white)
-![WebSockets](https://img.shields.io/badge/WebSockets-8.18.3-010101?logo=websocket&logoColor=white)
+| Layer | Technology |
+|---|---|
+| Frontend | React 18, Vite, Redux Toolkit, React Router v6 |
+| Styling | Vanilla CSS + Tailwind utility classes |
+| Auth | Clerk (`@clerk/clerk-react`, `@clerk/express`) |
+| Backend | Node.js, Express 5 |
+| ORM | Prisma 6 |
+| Database | PostgreSQL (Neon serverless) |
+| Events | Inngest (async emails, webhook sync) |
+| Email | Nodemailer |
 
 ---
 
-## 🏗️ Project Structure
+## 📁 Project Structure
 
-```groovy
-project-management/
-├── 📁 client/                    # React Frontend
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── store.js         # Redux store configuration
-│   │   │   └── themeSlice.js    # Theme management
-│   │   ├── assets/              # Static assets
-│   │   ├── components/          # Reusable React components
-│   │   ├── configs/
-│   │   ├── features/            # Feature slices
-│   │   ├── pages/               # Application pages
-│   │   ├── App.jsx              # Main App component
-│   │   ├── index.css            # Global styles
-│   │   └── main.jsx             # Entry point
-│   ├── .env                     # Environment variables
-│   ├── package.json             # Frontend dependencies
-│   └── vite.config.js           # Vite configuration
+```
+project-management-main/
+├── client/                   # React frontend (Vite)
+│   └── src/
+│       ├── app/              # Redux store
+│       ├── components/       # Reusable UI components
+│       │   ├── CreateProjectDialog.jsx
+│       │   ├── CreateTaskDialog.jsx
+│       │   ├── InviteMemberDialog.jsx
+│       │   ├── ProjectTasks.jsx
+│       │   ├── ProjectCalendar.jsx
+│       │   ├── ProjectAnalytics.jsx
+│       │   ├── TaskTimer.jsx
+│       │   └── ...
+│       ├── features/         # Redux slices
+│       │   └── workspaceSlice.js
+│       ├── hooks/            # Custom hooks (useRole)
+│       ├── pages/
+│       │   ├── Layout.jsx        # Auth guard + workspace gate
+│       │   ├── LoginPage.jsx     # Dual-role login UI
+│       │   ├── Dashboard.jsx     # Role router → Admin/Member
+│       │   ├── AdminDashboard.jsx
+│       │   ├── MemberDashboard.jsx
+│       │   ├── Projects.jsx
+│       │   ├── ProjectDetails.jsx
+│       │   ├── TaskDetails.jsx
+│       │   └── Team.jsx
+│       └── configs/
+│           └── api.js            # Axios instance
 │
-├── 📁 server/                   # Express Backend
-│   ├── configs/
-│   ├── controllers/             # Route controllers
-│   ├── inngest/                 # Background jobs
-│   ├── middlewares/             # Express middlewares
-│   ├── prisma/                  # Database schema
-│   ├── routes/                  # API routes
-│   ├── .env                     # Server environment variables
-│   ├── package.json             # Backend dependencies
-│   └── server.js               # Server entry point
-│
-├── LICENSE                      # ISC License
-└── README.md                   # This file
-```
-
-### 📦 Package Scripts
-
-**Frontend (Client):**
-
-```json
-{
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  }
-}
-```
-
-**Backend (Server):**
-
-```json
-{
-  "scripts": {
-    "postinstall": "npx prisma generate",
-    "server": "nodemon server.js",
-    "start": "prisma generate && node server.js"
-  }
-}
+└── server/                   # Node.js + Express backend
+    ├── controllers/
+    │   ├── workspaceController.js
+    │   ├── projectController.js
+    │   ├── taskController.js
+    │   └── commentController.js
+    ├── routes/
+    │   ├── workspaceRoutes.js
+    │   ├── projectRoutes.js
+    │   ├── taskRoutes.js
+    │   └── commentRoutes.js
+    ├── middlewares/
+    │   └── authMiddleware.js     # Clerk JWT verification
+    ├── inngest/
+    │   └── index.js              # Inngest functions (email, sync)
+    ├── configs/
+    │   ├── prisma.js
+    │   └── nodemailer.js
+    ├── prisma/
+    │   └── schema.prisma
+    └── server.js
 ```
 
 ---
 
-## ⚡ Getting Started
+## ⚙️ Local Setup
 
 ### Prerequisites
+- Node.js 18+
+- A [Clerk](https://clerk.com) account (free)
+- A [Neon](https://neon.tech) PostgreSQL database (free)
 
-- Node.js (v18 or higher)
-- PostgreSQL (or Neon PostgreSQL account)
-- Clerk account for authentication
-- Inngest account for background jobs
+---
 
-### Clone the repository:
+### 1. Clone & Install
 
-```console
-git clone https://github.com/elyse502/project-management.git
-cd project-management
+```bash
+git clone https://github.com/jayeshpandey01/task_manager.git
+cd task_manager
+
+# Install server deps
+cd server && npm install
+
+# Install client deps
+cd ../client && npm install
 ```
 
-### Backend Setup
+---
 
-```console
-cd server
-npm install
-cp .env.example .env
-# Configure your environment variables
-npm run server
-```
-
-### Frontend Setup
-
-```console
-cd client
-npm install
-cp .env.example .env
-# Configure your environment variables
-npm run dev
-```
-
-### Environment Variables
-
-**Server (.env):**
+### 2. Server Environment — `server/.env`
 
 ```env
-DATABASE_URL="neon_postgresql_connection_string"
-CLERK_SECRET_KEY="your_clerk_secret_key"
-INNGEST_EVENT_KEY="your_inngest_event_key"
+DATABASE_URL="postgresql://user:pass@host/db?sslmode=require&channel_binding=require"
+DIRECT_URL="postgresql://user:pass@direct-host/db?sslmode=require&channel_binding=require"
+
+CLERK_PUBLISHABLE_KEY="pk_test_..."
+CLERK_SECRET_KEY="sk_test_..."
+
+INNGEST_EVENT_KEY="..."
+
 EMAIL_HOST="smtp.gmail.com"
 EMAIL_PORT=587
 EMAIL_USER="your_email@gmail.com"
 EMAIL_PASS="your_app_password"
 ```
 
-**Client (.env):**
+---
+
+### 3. Client Environment — `client/.env`
 
 ```env
-VITE_CLERK_PUBLISHABLE_KEY="your_clerk_publishable_key"
-VITE_API_URL="http://localhost:5000/api"
+VITE_CLERK_PUBLISHABLE_KEY="pk_test_..."
+VITE_API_URL="http://localhost:5000"
+VITE_BASEURL="http://localhost:5000"
 ```
 
 ---
 
-## 🗄️ Database Schema
+### 4. Database Migration
 
-The application uses **Neon PostgreSQL** with Prisma ORM. Core models include:
-
-- **User** - Managed by Clerk authentication
-- **Organization** - Workspace/company entities
-- **Member** - Organization team members
-- **Project** - Projects within organizations
-- **Task** - Individual tasks with assignees
-- **Comment** - Task/project comments
-- **Notification** - User notifications
+```bash
+cd server
+npx prisma migrate dev --name init
+npx prisma generate
+```
 
 ---
 
-## 📡 API Endpoints
+### 5. Run Development Servers
 
-### Authentication (Clerk)
+```bash
+# Terminal 1 — Backend
+cd server
+npm run server
 
-- User signup/login via Clerk
-- Organization-based access control
-- Protected API routes with middleware
+# Terminal 2 — Frontend
+cd client
+npm run dev
+```
 
-### Workspaces
-
-- `GET /api/workspaces` - List user's workspaces
-- `POST /api/workspaces` - Create new workspace
-- `POST /api/workspaces/:id/invite` - Invite members
-
-### Projects
-
-- `GET /api/projects` - List organization projects
-- `POST /api/projects` - Create new project
-- `GET /api/projects/:id` - Get project details
-- `PUT /api/projects/:id` - Update project
-- `DELETE /api/projects/:id` - Delete project
-
-### Tasks
-
-- `GET /api/tasks` - List project tasks
-- `POST /api/tasks` - Create new task
-- `PUT /api/tasks/:id` - Update task status
-- `POST /api/tasks/:id/assign` - Assign task to member
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:5000`
 
 ---
 
-## 🔄 Background Jobs
+## 🔌 API Routes
 
-The application uses **Inngest** for handling background jobs:
+### Workspaces — `/api/workspaces`
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/` | Get user's workspaces |
+| `POST` | `/` | Create workspace directly |
+| `POST` | `/add-member` | Add member to workspace |
+| `PUT` | `/member/:id/block` | Block / unblock member |
+| `PUT` | `/member/:id/score` | Update member score |
 
-1. **Email Notifications** - Send task assignment emails
-2. **Due Date Reminders** - Send reminder emails 24h before due date
-3. **Clerk Webhooks** - Handle user/organization sync events
-4. **Analytics Processing** - Process project statistics
+### Projects — `/api/projects`
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/` | Create project |
+| `PUT` | `/:id` | Update project |
+| `DELETE` | `/:id` | Delete project |
 
----
+### Tasks — `/api/tasks`
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/` | Create task (with optional GitHub URL) |
+| `PUT` | `/:id` | Update task |
+| `PUT` | `/:id/accept` | Member accepts task (starts timer) |
+| `DELETE` | `/` | Delete tasks |
 
-## 🎨 UI/UX Features
-
-- **Responsive Design** - Works on all devices
-- **Dark/Light Mode** - Theme toggle support
-- **Real-time Updates** - WebSocket connections for live updates
-- **Drag & Drop** - Task status updates
-- **Charts & Analytics** - Project insights with Recharts
-- **Calendar View** - Task scheduling and due dates
-
----
-
-## 🚀 Deployment
-
-### Vercel Deployment
-
-Both client and server are configured for Vercel deployment with `vercel.json` configuration files.
-
-### Database
-
-- Uses **Neon PostgreSQL** for serverless database
-- Connection pooling for optimal performance
-- Automatic backups and scaling
+### Comments — `/api/comments`
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/:taskId` | Get comments for a task |
+| `POST` | `/` | Add comment |
 
 ---
 
-## 📊 Future Enhancements
+## 🗄️ Database Schema (Key Models)
 
-- [ ] File attachments for tasks
-- [ ] Time tracking for tasks
-- [ ] Gantt chart visualization
-- [ ] Mobile application
-- [ ] Integrations (Slack, GitHub, etc.)
-- [ ] Advanced reporting and exports
-
----
-
-## 📝 License
-
-This project is licensed under the **MIT License**. See the [LICENSE](https://github.com/elyse502/project-management/blob/main/LICENSE) file for details.
+```prisma
+model User          { id, name, email, image }
+model Workspace     { id, name, slug, ownerId, members[], projects[] }
+model WorkspaceMember { userId, workspaceId, role (ADMIN|MEMBER), score, isBlocked }
+model Project       { name, description, priority, status, start_date, end_date, tasks[] }
+model Task          { title, type, status, priority, assigneeId, due_date,
+                      github_url?, isAccepted, acceptedAt? }
+model Comment       { content, userId, taskId }
+```
 
 ---
 
-## 🤝 Contributing
+## 📧 Async Events (Inngest)
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+| Event | Trigger | Action |
+|---|---|---|
+| `clerk/user.created` | Clerk webhook | Sync user to DB |
+| `clerk/organization.created` | Clerk webhook | Sync workspace to DB |
+| `clerk/organizationInvitation.accepted` | Clerk webhook | Add member to workspace |
+| `app/task.assigned` | Task creation | Send assignment email + due-date reminder |
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## Support
-
-For support, email _elyseniyibizi502@gmail.com_ or create an issue in the GitHub repository.
+> **Note:** Clerk webhooks require a public URL in production. In local dev, workspace and user sync happens via the direct `POST /api/workspaces` endpoint.
 
 ---
 
-## 📞 Contact
+## 👤 Author
 
-For any questions or support, please contact:
-
-- [**NIYIBIZI Elysée**](https://linktr.ee/niyibizi_elysee)👨🏿‍💻 | [Github](https://github.com/elyse502) | [Linkedin](https://www.linkedin.com/in/niyibizi-elys%C3%A9e/) | [Twitter](https://twitter.com/Niyibizi_Elyse).
-- **Email**: <elyseniyibizi502@gmail.com>
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/niyibizi-elys%C3%A9e/) [![@phenrysay](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/Niyibizi_Elyse) [![pH-7](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/elyse502)
+**Jayesh Pandey**  
+GitHub: [@jayeshpandey01](https://github.com/jayeshpandey01)
 
 ---
 
-<div align="center">
+## 📄 License
 
-**Built with ❤️ using modern web technologies 🚀**
-
-_Streamline your team's workflow with powerful project management tools_
-
-[⬆ Back to Top](#-table-of-contents)
-
-</div><br />
-#   t a s k _ m a n a g e r  
- 
+MIT
